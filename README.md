@@ -1,6 +1,9 @@
-# Data Structures and Algorithms
+# Projects in C++, Python, and more!
 
-This is a number of different coding projects I have developed since I began my journey in Software Development
+By: Andrew DiZenzo
+
+This is a number of different coding projects I have developed since I began my journey in Software Development.
+
 
 ## Usage
 

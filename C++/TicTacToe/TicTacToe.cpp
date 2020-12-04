@@ -1,14 +1,16 @@
 #include "iostream"
 #include<string>
 #include<algorithm>
+#include <cmath>
 using namespace std;
 
-
+// Creates a TicTacToe Class that has all of the controllers for the game
 class TicTacToe {
     char board[9];
     int turn_count = 0;
-public:
     char turn = 'X';
+public:
+    // Displays the game board to the terminal. 
     void print_board() {
         string output = "";
         for(int i=0; i<9;i++) {
@@ -45,55 +47,36 @@ public:
     void announce_move(int selected_move) {
         cout << turn << " moved to position " << selected_move << "\n\n";
     };
-    void congratulate() {
+    void congratulate_winner() {
         cout << "Congratulations, " << turn << "! You won! Play again? (1-Yes / 0-No) \n";
 
     };
+    // This win-checker functions by looping through the rows, columns, and diagonals
     bool has_winner() {
-        string row = "";
-        string column = "";
-        string diagonalL = "";
-        string diagonalR = "";
+        int row;
+        int column;
+        int diagonalL;
+        int diagonalR;
         if(turn_count<5) return false;
         for(int i=0;i<3;i++) {
-            row = "";
-            column = "";
-            diagonalL = "";
-            diagonalR = "";
+            row = 0;
+            column = 0;
+            diagonalL = 0;
+            diagonalR = 0;
             for(int j=0;j<3;j++) {
-                row += board[i*3+j];
-                column += board[i+j*3];
-                if(i==0) diagonalL += board[j*4];
-                if(i==0) diagonalR += board[2+2*j];
+                row += (board[i*3+j]=='X') ? 1 : (board[i*3+j]=='O') ? -1 : 0;
+                column += (board[i+j*3]=='X') ? 1 : (board[i+j*3]=='O') ? -1 : 0;
+                if(i==0) diagonalL += (board[j*4]=='X') ? 1 : (board[j*4]=='O') ? -1 : 0;
+                if(i==0) diagonalR += (board[2+2*j]=='X') ? 1 : (board[2+2*j]=='O') ? -1 : 0;
             }
-            if(row=="XXX" || row=="OOO") return true;
-            if(column=="XXX" || column=="OOO") return true;
-            if(diagonalL=="XXX" || diagonalL=="OOO") return true;
-            if(diagonalR=="XXX" || diagonalR=="OOO") return true;
-        }
-        
-        return false;
-    };
-    bool has_winner_display() {
-        string row = "";
-        string column = "";
-        string diagonalL = "";
-        string diagonalR = "";
-        for(int i=0;i<3;i++) {
-            row = "";
-            column = "";
-            diagonalL = "";
-            diagonalR = "";
-            for(int j=0;j<3;j++) {
-                row += board[i*3+j];
-                column += board[i+j*3];
-                if(i==0) diagonalL += board[j*4];
-                if(i==0) diagonalR += board[2+2*j];
-            }
-            if(row=="XXX") return true;
+            if(abs(row)==3) return true;
+            if(abs(column)==3) return true;
+            if(abs(diagonalL)==3) return true;
+            if(abs(diagonalR)==3) return true;
         }
         return false;
     };
+    // Gets player input. Could be improved with more error-checking.
     int get_input() {
         int inp;
         cin >> inp;
@@ -114,7 +97,8 @@ int main() {
         game.announce_move(selected_move);
         was_valid = game.player_move(selected_move);
         if(game.has_winner()) {
-            game.congratulate();
+            game.print_board();
+            game.congratulate_winner();
             selected_move = game.get_input();
             if(selected_move==0) is_playing = false; 
             game.clear_board();
